@@ -3,6 +3,8 @@ const {
   ChannelType,
   PermissionsBitField,
   EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
 } = require("discord.js");
 
 // Function to generate a random string as a unique identifier
@@ -57,7 +59,6 @@ module.exports = {
         .setDescription(
           `Thank you for creating a ticket, ${user.username}! A support representative will be with you shortly.`
         );
-
       await channel.send({ embeds: [embedMessage] });
 
       // Send notification to the support channel
@@ -67,14 +68,25 @@ module.exports = {
 
       if (supportChannel) {
         const notificationEmbed = new EmbedBuilder()
+          .setThumbnail(user.avatarURL())
           .setColor("#ff0000")
           .setTitle("New Ticket")
           .setDescription(
             `${user.username} has created a new ticket. Click below to join.`
           );
 
+        const notificationRow = new ActionRowBuilder().addComponents(
+          new ButtonBuilder()
+            .setLabel("View Ticket")
+            .setStyle("Link")
+            .setURL(
+              `https://discord.com/channels/${interaction.guild.id}/${channel.id}`
+            )
+        );
+
         await supportChannel.send({
           embeds: [notificationEmbed],
+          components: [notificationRow],
         });
       } else {
         console.error("Support channel not found!");
