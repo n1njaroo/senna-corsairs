@@ -3,8 +3,11 @@ const ExtendedClient = require('../../../class/ExtendedClient');
 
 module.exports = {
     structure: new SlashCommandBuilder()
-        .setName('show-modal')
+        .setName('announce')
         .setDescription('Modal interaction testing.'),
+    options: {
+            developers: true,
+        },
     /**
      * @param {ExtendedClient} client 
      * @param {ChatInputCommandInteraction} interaction 
@@ -12,16 +15,27 @@ module.exports = {
     run: async (client, interaction) => {
 
         const modal = new ModalBuilder()
-            .setTitle('Modal Example')
-            .setCustomId('modal-example')
+            .setTitle('Announcement')
+            .setCustomId('announcement')
             .addComponents(
                 new ActionRowBuilder()
                     .addComponents(
                         new TextInputBuilder()
-                            .setLabel('What\'s your name?')
-                            .setCustomId('name')
-                            .setPlaceholder('Type your name here!')
+                            .setLabel('Title')
+                            .setCustomId('title-input')
+                            .setPlaceholder('Type your title here!')
                             .setStyle(TextInputStyle.Short)
+                            .setRequired(true)
+                    )
+            )
+            .addComponents(
+                new ActionRowBuilder()
+                    .addComponents(
+                        new TextInputBuilder()
+                            .setLabel('Content')
+                            .setCustomId('content-input')
+                            .setPlaceholder('Type your content here!')
+                            .setStyle(TextInputStyle.Paragraph)
                             .setRequired(true)
                     )
             );
