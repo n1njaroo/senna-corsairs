@@ -22,22 +22,31 @@ module.exports = {
 
         if (config.handler?.mongodb?.enabled) {
             try {
-                const data = (await GuildSchema.findOne({ guild: message.guildId }));
+                const data = await GuildSchema.findOne({ guild: message.guildId });
 
                 if (data && data?.prefix) prefix = data.prefix;
             } catch {
                 prefix = config.handler.prefix;
-            };
-        };
+            }
+        }
 
-        const mapIntCmds = client.applicationcommandsArray.map((v) => `\`${(v.type === 2 || v.type === 3) ? '' : '/'}${v.name}\`: ${v.description || '(No description)'}`);
+        // Filter out commands if developers option is true
+        const mapIntCmds = client.applicationcommandsArray
+            .filter((v) => {
+                if (v.options && v.options.permissions === 'Administrator') {
+                    console.log(`Command ${v.name} has developers option set to true.`);
+                    return false; // exclude commands with developers option set to true
+                }
+                return true;
+            })
+            .map((v) => `\`${(v.type === 2 || v.type === 3) ? '' : '/'}${v.name}\`: ${v.description || '(No description)'}`);
 
         await interaction.followUp({
             embeds: [
                 new EmbedBuilder()
-                    .setTitle('Help command')
+                    .setTitle('Here are the following commands that I can provide!')
                     .addFields(
-                        { name: 'Slash commands', value: `${mapIntCmds.join('\n')}` }
+                        { name: 'Slash Commands', value: `${mapIntCmds.join('\n')}` }
                     )
             ]
         });

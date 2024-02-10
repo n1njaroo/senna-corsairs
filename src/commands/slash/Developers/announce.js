@@ -4,9 +4,11 @@ const ExtendedClient = require('../../../class/ExtendedClient');
 module.exports = {
     structure: new SlashCommandBuilder()
         .setName('announce')
-        .setDescription('Modal interaction testing.'),
+        .setDescription('Create an announcement in embed form.'),
+    
     options: {
-            developers: true,
+        developers: true,
+        permissions: 'Administrator',
         },
     /**
      * @param {ExtendedClient} client 

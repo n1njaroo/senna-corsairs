@@ -3,7 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 module.exports = {
     structure: new SlashCommandBuilder()
         .setName('invite-leaderboard')
-        .setDescription('Display the top users with the most invites.'),
+        .setDescription('Display leaderboard of most invites.'),
 
     run: async (client, interaction) => {
         var invites = await interaction.guild.invites.fetch();
